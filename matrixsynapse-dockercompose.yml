@@ -1,0 +1,22 @@
+---
+version: "3.3"
+
+services:
+    synapse:
+        image: "matrixdotorg/synapse:latest"
+        container_name: "synapse"
+        volumes:
+            - "./data:/data"
+        environment:
+            VIRTUAL_HOST: #put matrix subdomain here, eg: matrix.example.com
+            VIRTUAL_PORT: 8008
+            LETSENCRYPT_HOST: #put matrix subdomain here, eg: matrix.example.com
+            SYNAPSE_SERVER_NAME: #put matrix subdomain here, eg: matrix.example.com
+            SYNAPSE_REPORT_STATS: "yes"
+        networks: ["server"]
+        restart: "always"
+
+
+networks:
+    server:
+        external: true
