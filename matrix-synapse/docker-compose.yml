@@ -1,1 +1,31 @@
+---
+version: "3.3"
 
+services:
+    coturn: # Coturn server is necessary for enabling voice chat on matrix homeserver
+        build: .
+        image: "coturn/coturn:latest"
+        container_name: "coturn"
+        network_mode: host
+        volumes:
+            - ./turnserver.conf:/etc/turnserver.conf:ro # This is where you mount your turnserver.conf file,
+                                                        # I usually put mine in the same directory as the docker-compose file
+        restart: "always"
+    synapse: # This is the matrix synapse service
+        image: "matrixdotorg/synapse:latest"
+        container_name: "synapse"
+        volumes:
+            - "./data:/data" # This is where your matrix homeserver data folder will be, I have it in the same folder as the docker-compose file
+        environment:
+            VIRTUAL_HOST: #put matrix subdomain here, eg: matrix.example.com
+            VIRTUAL_PORT: 8008
+            LETSENCRYPT_HOST: #put matrix subdomain here, eg: matrix.example.com
+            SYNAPSE_SERVER_NAME: #put matrix subdomain here, eg: matrix.example.com
+            SYNAPSE_REPORT_STATS: "yes"
+        networks: ["server"]
+        restart: "always"
+
+
+networks:
+    server:
+        external: true
