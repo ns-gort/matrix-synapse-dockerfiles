@@ -1,0 +1,28 @@
+server_name: # Matrix subdomain goes here, e.g. matrix.example.com
+pid_file: /data/homeserver.pid
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+        compress: false
+database:
+  name: sqlite3
+  args:
+    database: /data/homeserver.db
+log_config: # /data/matrix.example.com.log.config
+media_store_path: /data/media_store
+registration_shared_secret: "b1hXVPer5,RAtmUL&pBsKhEzXCt~RptYpVPM+:Gw+-uoic~D9d"
+report_stats: true
+macaroon_secret_key: "Um;:9#dy179hnkJz,Q9tIRAp1S*7*6Mw+G~ZR:SNEk_xy7AGQS"
+form_secret: "@r9MB8ko*XFQ&Y+oVi.30cJVGhtLXAEihFFMIJQ+@qL9oLpTKk"
+signing_key_path: # /data/matrix.example.com.signing.key
+trusted_key_servers:
+  - server_name: "matrix.org"
+  
+turn_uris: [ # "turn:turn.example.com?transport=udp", # "turn:turn.example.com?transport=tcp" ]
+turn_shared_secret: # Static Auth Secret from turnserver.conf goes here
+turn_user_lifetime: 86400000
+turn_allow_guests: True
